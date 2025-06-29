@@ -1,23 +1,30 @@
 <div class="popup-backdrop">
   <div class="popup">
-
-<!--    =====Edit Mode =======-->
-    <ng-container *ngIf="type === POPUP_TYPE.EDIT ">
+    <!-- =====Edit Mode ======= -->
+    @if(type === POPUP_TYPE.EDIT){
+    <ng-container >
       <h3>Edit User</h3>
-      <p>Name: <strong>{{ user}}</strong></p>
-      <button (click)="onClose()" class="cancelBtn">Close</button>
+      <label>First Name:</label>
+      <input type="text" [(ngModel)]="editedUser.name.first_name" />
+      <label>Last Name:</label>
+      <input type="text" [(ngModel)]="editedUser.name.last_name" />
+
+      <div class="buttons">
+        <button class="cancelBtn" (click)="onClose()">Cancel</button>
+        <button class="okBtn" (click)="onConfirm()">Update</button>
+      </div>
     </ng-container>
-
-<!--    =====Confirm Delete Mode =======-->
-    <ng-container *ngIf="type === POPUP_TYPE.DELETE ">
-
+    }
+    @else if(type === POPUP_TYPE.DELETE){
+    <!-- =====Delete Mode ======= -->
+    <ng-container>
       <h3>Delete Confirmation</h3>
-      <p>Are you sure you want to delete <strong>{{ user?.name }}</strong>?</p>
+      <p>Are you sure you want to delete <strong>{{ userDetail.name.first_name }}</strong>?</p>
       <div class="buttons">
         <button class="cancelBtn" (click)="onClose()">Cancel</button>
         <button class="okBtn" (click)="onConfirm()">OK</button>
       </div>
     </ng-container>
-
+    }
   </div>
 </div>

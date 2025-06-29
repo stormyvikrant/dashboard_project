@@ -1,7 +1,7 @@
 <div class="table-wrapper">
   <div class="header">
     <h2>Team members</h2>
-    <span class="user-count">{{ tableData.grid_data.length || 0 }} users</span>
+    <span class="user-count">{{tableData && tableData.grid_data.length || 0 }} users</span>
   </div>
 
   <div class="table-scroll">
@@ -91,7 +91,8 @@
             <td class="actions">
               <button
                 type="button"
-                (click)="handleUserDetailPopUp(user); $event.stopPropagation()"
+                (click)="  handleEditPopUp
+(user); $event.stopPropagation()"
                 title="Edit"
               >
                 <img src="/editIcon.png" alt="Edit" width="18" />
@@ -135,7 +136,7 @@
 <app-pop-up
   *ngIf="isPopupVisible"
   [type]="popUpType"
-  [user]="selectedUserName"
+  [userDetail]="editableRow"
   (close)="closePopup()"
-  (confirm)="confirmPop()"
+  (confirm)="confirmPop($event)"
 ></app-pop-up>

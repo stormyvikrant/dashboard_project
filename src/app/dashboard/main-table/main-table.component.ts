@@ -21,7 +21,7 @@ export class MainTableComponent implements  OnInit {
   selectedUserIds: string[] = [];
   isPopupVisible:boolean = false;
   loading:boolean = false;
-  selectedUserName:string|null = null;
+  editableRow!:TransformedGridUser;
   selectedId:string|null = null;
   popUpType: POPUP_TYPE= POPUP_TYPE.EDIT;
   tableData!:TableResponse
@@ -74,26 +74,12 @@ export class MainTableComponent implements  OnInit {
   }
 
   totalPages() {
-    return Math.ceil(this.tableData.grid_data.length / this.pageSize);
+    return Math.ceil(this.tableData&&this.tableData.grid_data.length / this.pageSize);
   }
 
   goToPage(page: number) {
     this.currentPage = page;
   }
-
-  handleUserDetailPopUp(userData:TransformedGridUser ) {
-    this.popUpType=POPUP_TYPE.EDIT
-this.selectedUserName=userData.name.first_name+userData.name.last_name ;
-this.isPopupVisible=true
-    console.log(this.selectedUserName);
-  }
-
-  handleDelete(user:TransformedGridUser){
-    this.popUpType=POPUP_TYPE.DELETE
-    this.selectedId=user.id;
-    this.isPopupVisible=true
-  }
-
 
 
   handleRowClick(user: TransformedGridUser): void {
@@ -105,20 +91,42 @@ this.isPopupVisible=true
     }
   }
 
+  handleEditPopUp(userData: TransformedGridUser) {
+    this.popUpType = POPUP_TYPE.EDIT;
+    this.editableRow = userData;
+    this.isPopupVisible = true;
+  }
+
+  handleDelete(user: TransformedGridUser) {
+    this.popUpType = POPUP_TYPE.DELETE;
+    this.selectedId = user.id;
+    this.editableRow = user;
+    this.isPopupVisible = true;
+  }
+
   closePopup(): void {
     this.isPopupVisible = false;
   }
 
-  confirmPop(){
-    if (!this.selectedId) return;
+  confirmPop(event: TransformedGridUser | null): void {
+    if (this.popUpType === POPUP_TYPE.DELETE) {
+      if (!this.selectedId) return;
+      this.tableData.grid_data = this.tableData.grid_data.filter(user => user.id !== this.selectedId);
+      this.selectedId = null;
+    }
 
-    this.tableData.grid_data = this.tableData.grid_data.filter(
-      user => user.id !== this.selectedId
-    );
+    if (this.popUpType === POPUP_TYPE.EDIT && event) {
+      const index = this.tableData.grid_data.findIndex(user => user.id === event.id);
+      if (index !== -1) {
+        this.tableData.grid_data[index] = event;
+      }
+    }
+
+    this.isPopupVisible = false;
+  }
 
 
-    this.selectedId = '';
-    this.isPopupVisible = false;  }
+
 
   toggleSelectAll(): void {
     if (this.selectedAll) {
