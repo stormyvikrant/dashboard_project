@@ -1,0 +1,47 @@
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .popup {
+    background: white;
+    padding: 24px;
+    border-radius: 10px;
+    min-width: 300px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+    h3 {
+      margin-top: 0;
+    }
+
+    button {
+      margin-top: 16px;
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background: #6a28d9;
+      }
+    }
+    .buttons{
+      display:  flex;
+      justify-content: space-between;
+      .cancelBtn{
+        background: #ef0b0b;
+        color: #fdfdfd;
+      }
+
+    }
+  }
+}

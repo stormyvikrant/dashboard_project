@@ -1,0 +1,141 @@
+<div class="table-wrapper">
+  <div class="header">
+    <h2>Team members</h2>
+    <span class="user-count">{{ tableData.grid_data.length || 0 }} users</span>
+  </div>
+
+  <div class="table-scroll">
+    <!-- ✅ Spinner when loading -->
+    <div *ngIf="loading" class="spinner-wrapper">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- ✅ Table when not loading -->
+    <table *ngIf="!loading">
+      <thead>
+      <tr>
+        <th>
+          <label class="custom-checkbox">
+            <input
+              type="checkbox"
+              [(ngModel)]="selectedAll"
+              (change)="toggleSelectAll()"
+            />
+            <span class="checkmark"></span>
+          </label>
+        </th>
+        @for (column of tableData.grid_columns; track column) {
+          <th [ngStyle]="{ 'text-align': column.align }">
+            {{ column.column_name }}
+          </th>
+        }
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of tableData.grid_data; track user.id) {
+          <tr
+            [class.selected]="selectedUserIds.includes(user.id)"
+            (click)="handleRowClick(user); $event.stopPropagation()"
+          >
+            <td>
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  [checked]="selectedUserIds.includes(user.id)"
+                  readonly
+                />
+                <span class="checkmark"></span>
+              </label>
+            </td>
+            <td class="user">
+              <div class="avatar">
+                @if (user.image) {
+                  <img [src]="user.image" alt="avatar" />
+                } @else {
+                  <span class="initials">
+                    {{ getInitials(user.name.first_name) }}
+                  </span>
+                }
+              </div>
+              <div class="info">
+                <p class="name">
+                  {{ user.name.first_name }} {{ user.name.last_name }}
+                </p>
+                <p class="username">{{ user.name.handle }}</p>
+              </div>
+            </td>
+            <td class="statusBadge">
+              <li class="status" [ngClass]="user.status.toLowerCase()">
+                {{ user.status }}
+              </li>
+            </td>
+            <td><p class="roleTd">{{ user.role }}</p></td>
+            <td>
+              <div class="progress-bar">
+                <div class="fill" [style.width.%]="user.license_used"></div>
+              </div>
+              <span class="percent">{{ user.license_used }}%</span>
+            </td>
+            <td>
+              <span
+                class="badge"
+                *ngFor="let team of user.teams"
+                [ngStyle]="{
+                  'background-color': team.background_color,
+                  color: team.text_color
+                }"
+              >{{ team.value }}</span
+              >
+            </td>
+            <td class="actions">
+              <button
+                type="button"
+                (click)="handleUserDetailPopUp(user); $event.stopPropagation()"
+                title="Edit"
+              >
+                <img src="/editIcon.png" alt="Edit" width="18" />
+              </button>
+              <button
+                type="button"
+                (click)="handleDelete(user); $event.stopPropagation()"
+                title="Delete"
+              >
+                <img src="/deleteIcon.png" alt="Delete" width="18" />
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+      ← Previous
+    </button>
+    <div class="pagination_numberBox">
+      @for (page of paginationPages; track page) {
+        <span
+          (click)="goToPage(page)"
+          [class.active]="currentPage === page"
+        >{{ page }}</span
+        >
+      }
+    </div>
+    <button
+      (click)="goToPage(currentPage + 1)"
+      [disabled]="currentPage === totalPages()"
+    >
+      Next →
+    </button>
+  </div>
+</div>
+
+<app-pop-up
+  *ngIf="isPopupVisible"
+  [type]="popUpType"
+  [user]="selectedUserName"
+  (close)="closePopup()"
+  (confirm)="confirmPop()"
+></app-pop-up>

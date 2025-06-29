@@ -1,0 +1,84 @@
+<div>
+  <h2 class="welcome">Welcome back, Olivia</h2>
+
+  <div class="dashboard-grid">
+    <!--==== Bar Chart===== -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-body">
+          <img src="/barChartIcon.png" alt="icon" />
+          <div class="text">
+            <h3>Vendor breakdown</h3>
+            <p>Keep track of vendors and their security ratings.</p>
+          </div>
+          <button class="menu">⋮</button>
+        </div>
+      </div>
+
+      <!-- Bar Chart Wrapper -->
+      <div class="bar-chart-container">
+        <apx-chart
+          [series]="barSeries"
+          [chart]="barChart"
+          [plotOptions]="barPlotOptions"
+          [xaxis]="barXAxis"
+          [yaxis]="barYAxis"
+          [fill]="barFill"
+          [tooltip]="barTooltip"
+          [dataLabels]="barDataLabels"
+          [grid]="barGrid"
+          [legend]="barLegend"
+          [title]="barTitle">
+        </apx-chart>
+      </div>
+
+
+
+
+      <div class="bottom-button-chart">
+        <button class="report-btn">View full report</button>
+      </div>
+    </div>
+
+    <!--==== Radial Chart===== -->
+    <div class="card gauge-card">
+      <div class="card-header">
+        <div class="card-header-body">
+          <div class="text">
+            <h3>Vendors monitored</h3>
+            <p>You’re using 80% of available spots.</p>
+          </div>
+          <button class="menu">⋮</button>
+        </div>
+      </div>
+
+      <apx-chart
+        [series]="radialSeries"
+        [chart]="radialChart"
+        [plotOptions]="radialPlotOptions"
+        [labels]="radialLabels"
+        [colors]="radialColors"
+      ></apx-chart>
+
+      <div class="center">
+        <h1>240</h1>
+        <p class="percent">▲ 10%</p>
+        <p>You’ve almost reached your limit.</p>
+        <small>
+          You have used 80% of your available spots.<br />
+          Upgrade plan to monitor more vendors.
+        </small>
+      </div>
+
+      <div class="bottom-button">
+        <button class="upgrade-btn">⬆ Upgrade plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!--==== Table =====-->
+  <div>
+    <app-main-table></app-main-table>
+  </div>
+
+</div>
